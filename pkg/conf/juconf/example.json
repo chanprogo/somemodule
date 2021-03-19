@@ -1,0 +1,9 @@
+{
+	"mysqlType" : "mysql",
+    "mysqlAddress" : "root:123456@tcp(10.1.7.90:3306)/mydb?charset=utf8",
+	"mysqlQueue" : 1000,
+
+	"boolValue" : true,
+	
+	"myName":"read-config-test"
+}
