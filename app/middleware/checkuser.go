@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 
-	"github.com/chanprogo/somemodule/app/server/controller"
+	"github.com/chanprogo/somemodule/app"
 	"github.com/chanprogo/somemodule/pkg/constant"
 	"github.com/chanprogo/somemodule/pkg/log"
 	"github.com/chanprogo/somemodule/pkg/module/redis/cache"
@@ -24,7 +24,7 @@ func AuthValidateMiddleware() gin.HandlerFunc {
 		authtoken := ctx.GetHeader("authtoken")
 		keyid := ctx.GetHeader("keyid")
 		if authtoken == "" || keyid == "" {
-			new(controller.Controller).RespErr(ctx, nil, "请检查是否登录,TOKEN 或 keyid 为空")
+			new(app.Controller).RespErr(ctx, nil, "请检查是否登录,TOKEN 或 keyid 为空")
 			ctx.Abort()
 			return
 		}
@@ -37,7 +37,7 @@ func AuthValidateMiddleware() gin.HandlerFunc {
 			cachedToken = cache.Get(cacheKey)
 
 			if cachedToken == "" {
-				new(controller.Controller).RespErr(ctx, nil, constant.RESPONSE_CODE_SESSION_INVALID)
+				new(app.Controller).RespErr(ctx, nil, constant.RESPONSE_CODE_SESSION_INVALID)
 				ctx.Abort()
 				return
 			}
@@ -48,7 +48,7 @@ func AuthValidateMiddleware() gin.HandlerFunc {
 			cachedToken = cache.Get(cacheKey)
 
 			if cachedToken != authtoken {
-				new(controller.Controller).RespErr(ctx, nil, constant.RESPONSE_CODE_SESSION_REPLACED)
+				new(app.Controller).RespErr(ctx, nil, constant.RESPONSE_CODE_SESSION_REPLACED)
 				ctx.Abort()
 				return
 			}
@@ -73,7 +73,7 @@ func AccessTokenMiddleware() gin.HandlerFunc {
 		}
 
 		if authtoken == "" {
-			new(controller.Controller).RespErr(c, nil, "请检查是否登录,TOKEN 为空")
+			new(app.Controller).RespErr(c, nil, "请检查是否登录,TOKEN 为空")
 			c.Abort()
 			return
 		}
@@ -99,7 +99,7 @@ func AccessTokenMiddleware() gin.HandlerFunc {
 			}
 
 			if uid <= 0 {
-				new(controller.Controller).RespErr(c, nil, "请检查是否登录,获取 UID 失败")
+				new(app.Controller).RespErr(c, nil, "请检查是否登录,获取 UID 失败")
 				c.Abort()
 				return
 			}

@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/chanprogo/somemodule/app/server/controller"
+	"github.com/chanprogo/somemodule/app"
 	"github.com/chanprogo/somemodule/pkg/conf/bconf"
 
 	"github.com/gin-gonic/gin"
@@ -27,7 +27,7 @@ func CheckParamUnanimous() gin.HandlerFunc {
 		// 获取用户提交的签名
 		formSign := ctx.GetHeader("sign")
 		if formSign == "" {
-			new(controller.Controller).RespErr(ctx, "缺少参数sign")
+			new(app.Controller).RespErr(ctx, "缺少参数sign")
 			ctx.Abort()
 			return
 		}
@@ -64,7 +64,7 @@ func CheckParamUnanimous() gin.HandlerFunc {
 
 		// 对比服务器生成的签名和用户提交的签名
 		if sign != formSign {
-			new(controller.Controller).RespErr(ctx, "参数不一致")
+			new(app.Controller).RespErr(ctx, "参数不一致")
 			ctx.Abort()
 			return
 		}
@@ -74,13 +74,13 @@ func CheckParamUnanimous() gin.HandlerFunc {
 		if timestamp != "" {
 			timestampInt, err := strconv.ParseInt(timestamp, 10, 64)
 			if err != nil {
-				new(controller.Controller).RespErr(ctx, "参数timestamp格式错误")
+				new(app.Controller).RespErr(ctx, "参数timestamp格式错误")
 				ctx.Abort()
 				return
 			}
 
 			if time.Now().Unix()-timestampInt > 30 { //有效期30分钟
-				new(controller.Controller).RespErr(ctx, "sign已失效")
+				new(app.Controller).RespErr(ctx, "sign已失效")
 				ctx.Abort()
 				return
 			}

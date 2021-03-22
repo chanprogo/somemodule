@@ -1,10 +1,9 @@
-package controller
+package app
 
 import (
 	"net/http"
 	"strconv"
 
-	"github.com/chanprogo/somemodule/app/errors"
 	"github.com/chanprogo/somemodule/pkg/constant"
 
 	"github.com/gin-gonic/gin"
@@ -13,12 +12,6 @@ import (
 const (
 	SAVE_DATA_KEY = "save_api_data_key"
 )
-
-type Response struct {
-	Code int         `json:"code"`
-	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
-}
 
 type Controller struct {
 }
@@ -71,7 +64,7 @@ func (c *Controller) RespErr(ctx *gin.Context, options ...interface{}) {
 		case string:
 			resp.Msg = opt
 
-		case errors.SysErrorInterface: // 系统错误
+		case SysErrorInterface: // 系统错误
 			resp.Code = opt.Status()
 
 			if gin.Mode() == gin.ReleaseMode { // 生产环境不显示错误细节
@@ -80,7 +73,7 @@ func (c *Controller) RespErr(ctx *gin.Context, options ...interface{}) {
 				resp.Msg = opt.String()
 			}
 
-		case errors.NormalErrorInterface: // 常规错误
+		case NormalErrorInterface: // 常规错误
 			if opt.Status() != 0 { // 常规错误指定了code并且不为0
 				resp.Code = opt.Status()
 			}
