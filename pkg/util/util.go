@@ -16,7 +16,13 @@ func Guid() string {
 	if _, err := io.ReadFull(rand.Reader, b); err != nil {
 		return ""
 	}
-	return GetMd5(base64.URLEncoding.EncodeToString(b))
+	return getMd5(base64.URLEncoding.EncodeToString(b))
+}
+
+func getMd5(s string) string {
+	h := md5.New()
+	h.Write([]byte(s))
+	return hex.EncodeToString(h.Sum(nil))
 }
 
 func GenerateRandomString(len int64) string { // GetSjCode
@@ -35,10 +41,4 @@ func GenerateRandomString(len int64) string { // GetSjCode
 	}
 
 	return string(result)
-}
-
-func GetMd5(s string) string {
-	h := md5.New()
-	h.Write([]byte(s))
-	return hex.EncodeToString(h.Sum(nil))
 }
