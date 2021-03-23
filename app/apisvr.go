@@ -12,7 +12,7 @@ import (
 var GinEngine *gin.Engine
 var APISvr *http.Server
 
-func NewAPISvr(runmode string, httpport int) {
+func NewAPISvr(runmode string, httpport int, readTimeout time.Duration, writeTimeout time.Duration) {
 
 	gin.SetMode(runmode)
 
@@ -27,15 +27,10 @@ func NewAPISvr(runmode string, httpport int) {
 		Addr:           endPoint,
 		Handler:        GinEngine,
 		MaxHeaderBytes: maxHeaderBytes,
+
+		ReadTimeout:  readTimeout,
+		WriteTimeout: writeTimeout,
 	}
-	/*
-	   readTimeout := iconf.ServerSetting.ReadTimeout
-	   	writeTimeout := iconf.ServerSetting.WriteTimeout
-	   	server := &http.Server{
-	   		ReadTimeout:   readTimeout ,
-	   		WriteTimeout:   writeTimeout,
-	   	}
-	*/
 
 }
 

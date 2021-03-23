@@ -16,7 +16,7 @@ func main() {
 	logging.Setup(iconf.AppSetting.RuntimeRootPath, iconf.AppSetting.LogSavePath, iconf.AppSetting.LogSaveName,
 		iconf.AppSetting.TimeFormat, iconf.AppSetting.LogFileExt)
 
-	app.NewAPISvr(iconf.ServerSetting.RunMode, iconf.ServerSetting.HttpPort)
+	app.NewAPISvr(iconf.ServerSetting.RunMode, iconf.ServerSetting.HttpPort, iconf.ServerSetting.ReadTimeout, iconf.ServerSetting.WriteTimeout)
 	router.InitRouter(app.GinEngine)
 	app.RunAPISvr()
 

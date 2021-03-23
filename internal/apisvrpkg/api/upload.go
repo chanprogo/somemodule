@@ -20,13 +20,11 @@ import (
 // @Failure 500 {object} app.Response
 // @Router /api/v1/tags/import [post]
 func UploadImage(c *gin.Context) {
-
 	appG := app.Gin{C: c}
-
 	file, image, err := c.Request.FormFile("image")
 	if err != nil {
 		logging.Warn(err)
-		appG.Response(http.StatusInternalServerError, constant.ERROR, nil)
+		appG.Response(http.StatusInternalServerError, constant.RESPONSE_CODE_SYSTEM, nil)
 		return
 	}
 
@@ -60,9 +58,8 @@ func UploadImage(c *gin.Context) {
 		return
 	}
 
-	appG.Response(http.StatusOK, constant.SUCCESS, map[string]string{
+	appG.Response(http.StatusOK, constant.RESPONSE_CODE_OK, map[string]string{
 		"image_url":      common.GetImageFullUrl(imageName),
 		"image_save_url": savePath + imageName,
 	})
-
 }

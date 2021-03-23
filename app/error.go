@@ -17,7 +17,6 @@ type SysError struct {
 	simpleMsg string
 	fullMsg   string
 }
-
 type SysErrorInterface interface {
 	Error() string
 	String() string
@@ -43,7 +42,6 @@ func NewSys(options ...interface{}) error {
 		fullMsg:   fullMsg,
 	}
 }
-
 func (e *SysError) Error() string {
 	return e.simpleMsg
 }
@@ -110,21 +108,20 @@ func GetErrStatus(err interface{}) int32 {
 		return int32(constant.RESPONSE_CODE_ERROR)
 	}
 }
-
 func GetErrMsg(err interface{}) string {
 	switch v := err.(type) {
 	case SysErrorInterface:
 		return v.String()
-	case error:
-		return v.Error()
 	case NormalErrorInterface:
+		return v.Error()
+	case error:
 		return v.Error()
 	default:
 		return ""
 	}
 }
 
-// 兼容golang errors对象
+// 兼容 golang errors 对象
 func New(text string) error {
 	return goErrors.New(text)
 }

@@ -15,7 +15,7 @@ func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		var data interface{}
-		var code int = constant.SUCCESS
+		var code int = constant.RESPONSE_CODE_OK
 
 		token := c.Query("token")
 
@@ -37,7 +37,7 @@ func JWT() gin.HandlerFunc {
 			}
 		}
 
-		if code != constant.SUCCESS {
+		if code != constant.RESPONSE_CODE_OK {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code": code,
 				"msg":  constant.GetMsg(code),

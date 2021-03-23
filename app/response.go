@@ -1,9 +1,8 @@
 package app
 
 import (
-	"github.com/gin-gonic/gin"
-
 	"github.com/chanprogo/somemodule/pkg/constant"
+	"github.com/gin-gonic/gin"
 )
 
 type Gin struct {
