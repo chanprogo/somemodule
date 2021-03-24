@@ -52,7 +52,8 @@ func (t *Tag) Count() (int, error) {
 }
 
 type CTag struct {
-	ID    int
+	ID int
+
 	Name  string
 	State int
 
@@ -65,7 +66,6 @@ func (t *CTag) GetTagsKey() string {
 		"TAG",
 		"LIST",
 	}
-
 	if t.Name != "" {
 		keys = append(keys, t.Name)
 	}
@@ -78,16 +78,13 @@ func (t *CTag) GetTagsKey() string {
 	if t.PageSize > 0 {
 		keys = append(keys, strconv.Itoa(t.PageSize))
 	}
-
 	return strings.Join(keys, "_")
 }
 
 func (t *Tag) GetAll() ([]model.Tag, error) {
 	var tags, cacheTags []model.Tag
-
 	cache := CTag{
-		State: t.State,
-
+		State:    t.State,
 		PageNum:  t.PageNum,
 		PageSize: t.PageSize,
 	}
@@ -101,12 +98,10 @@ func (t *Tag) GetAll() ([]model.Tag, error) {
 			return cacheTags, nil
 		}
 	}
-
 	tags, err := model.GetTags(t.PageNum, t.PageSize, t.getMaps())
 	if err != nil {
 		return nil, err
 	}
-
 	gredis.Set(key, tags, 3600)
 	return tags, nil
 }

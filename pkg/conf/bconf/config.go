@@ -37,7 +37,7 @@ func (c *config) load() {
 
 	var err error
 
-	c.ApiConf.HttpPort = c.BeeConfiger.String("system::http_port")
+	c.ApiConf.HttpPort, _ = c.BeeConfiger.Int("system::http_port")
 	c.ApiConf.RpcPort = c.BeeConfiger.String("system::rpc_port")
 	c.ApiConf.RunMode = c.BeeConfiger.String("system::run_mode")
 	if c.ApiConf.RunMode != gin.DebugMode && c.ApiConf.RunMode != gin.TestMode && c.ApiConf.RunMode != gin.ReleaseMode {
@@ -48,14 +48,14 @@ func (c *config) load() {
 	if c.BeeConfiger.String("system::worker_id") != "" {
 		c.ApiConf.WorkerID, err = c.BeeConfiger.Int64("system::worker_id")
 		if err != nil {
-			panic("读取system::worker_id配置出错")
+			panic("读取 system::worker_id 配置出错")
 		}
 	}
 
 	c.ApiConf.LogPath = c.BeeConfiger.String("log::path")
 	c.ApiConf.LogLevel = c.BeeConfiger.String("log::level")
 	if c.ApiConf.LogLevel != "debug" && c.ApiConf.LogLevel != "info" && c.ApiConf.LogLevel != "error" {
-		panic("log_level配置错误")
+		panic("log_level 配置错误")
 	}
 
 	if c.BeeConfiger.String("db::driver_name") != "" {

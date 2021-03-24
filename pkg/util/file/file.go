@@ -22,26 +22,36 @@ func GetExt(fileName string) string {
 // CheckNotExist check if the file exists
 func CheckNotExist(src string) bool {
 	_, err := os.Stat(src)
-
 	return os.IsNotExist(err)
 }
 
 // CheckPermission check if the file has permission
 func CheckPermission(src string) bool {
 	_, err := os.Stat(src)
-
 	return os.IsPermission(err)
 }
 
 // IsNotExistMkDir create a directory if it does not exist
 func IsNotExistMkDir(src string) error {
-	if notExist := CheckNotExist(src); notExist == true {
+	if CheckNotExist(src) {
 		if err := MkDir(src); err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
+
+// 判断文件夹是否存在
+func PathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }
 
 // MkDir create a directory

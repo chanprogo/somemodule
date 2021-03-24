@@ -1,7 +1,7 @@
 package bconf
 
 type ApiConfig struct {
-	HttpPort    string
+	HttpPort    int
 	RpcPort     string
 	RunMode     string
 	LogPath     string
