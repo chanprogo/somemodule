@@ -30,6 +30,7 @@ require (
 	github.com/shopspring/decimal v1.2.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/smartystreets/goconvey v1.6.4 // indirect
+	github.com/tealeg/xlsx v1.0.5
 	github.com/ugorji/go v1.1.13 // indirect
 	github.com/unknwon/com v1.0.1
 	github.com/wvanbergen/kafka v0.0.0-20171203153745-e2edea948ddf

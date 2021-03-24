@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/chanprogo/somemodule/app"
+	"github.com/chanprogo/somemodule/pkg/log"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/olahol/melody.v1"
 )
@@ -22,6 +23,7 @@ func (t *MelodyController) Router(e *gin.Engine) {
 	t.Melody.HandleMessage(func(s *melody.Session, msg []byte) {
 		ret := make(map[string]interface{})
 		ret["state"] = 1
+		log.Logger.Info("HandleMessage")
 		t.Melody.BroadcastFilter(t.WsRespOK(ret), func(q *melody.Session) bool {
 			return s == q
 		})

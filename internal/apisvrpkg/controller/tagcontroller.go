@@ -22,6 +22,9 @@ func (t *TagController) Router(e *gin.Engine) {
 		group.DELETE("/tags/:id", t.DeleteTag) // 删除指定标签
 		group.PUT("/tags/:id", t.EditTag)      // 更新指定标签
 		group.GET("/tags", t.GetTags)          // 获取标签列表
+
+		group.POST("/tags/export", t.ExportTag) //导出标签
+		group.POST("/tags/import", t.ImportTag) //导入标签
 	}
 }
 
@@ -196,5 +199,50 @@ func (t *TagController) GetTags(c *gin.Context) {
 
 	t.Put(c, "lists", tags)
 	t.Put(c, "total", count)
+	t.RespOK(c)
+}
+
+// @Produce  json
+// @Param name body string false "Name"
+// @Param state body int false "State"
+// @Router /api/tags/export [post]
+func (t *TagController) ExportTag(c *gin.Context) {
+	name := c.PostForm("name")
+	state := -1
+	if arg := c.PostForm("state"); arg != "" {
+		state = com.StrTo(arg).MustInt()
+	}
+	tagService := service.Tag{
+		Name:  name,
+		State: state,
+	}
+	filename, err := tagService.Export()
+	if err != nil {
+		// http.StatusInternalServerError
+		t.RespErr(c, "导出标签失败")
+		return
+	}
+	t.Put(c, "export_url", service.GetExcelFullUrl(filename))
+	t.Put(c, "export_save_url", service.GetExcelPath()+filename)
+	t.RespOK(c)
+}
+
+// @Produce  json
+// @Param file formData file true "Excel File"
+// @Router /api/tags/import [post]
+func (t *TagController) ImportTag(c *gin.Context) {
+	file, _, err := c.Request.FormFile("file")
+	if err != nil {
+		// http.StatusInternalServerError
+		t.RespErr(c, err)
+		return
+	}
+	tagService := service.Tag{}
+	err = tagService.Import(file)
+	if err != nil {
+		// http.StatusInternalServerError
+		t.RespErr(c, "导入标签失败")
+		return
+	}
 	t.RespOK(c)
 }

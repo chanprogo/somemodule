@@ -11,7 +11,6 @@ import (
 // GetSize get the file size
 func GetSize(f multipart.File) (int, error) {
 	content, err := ioutil.ReadAll(f)
-
 	return len(content), err
 }
 
@@ -23,25 +22,22 @@ func GetExt(fileName string) string {
 // CheckNotExist check if the file exists
 func CheckNotExist(src string) bool {
 	_, err := os.Stat(src)
-
 	return os.IsNotExist(err)
 }
 
 // CheckPermission check if the file has permission
 func CheckPermission(src string) bool {
 	_, err := os.Stat(src)
-
 	return os.IsPermission(err)
 }
 
 // IsNotExistMkDir create a directory if it does not exist
 func IsNotExistMkDir(src string) error {
-	if notExist := CheckNotExist(src); notExist == true {
+	if CheckNotExist(src) {
 		if err := MkDir(src); err != nil {
 			return err
 		}
 	}
-
 	return nil
 }
 
@@ -51,7 +47,6 @@ func MkDir(src string) error {
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -61,7 +56,6 @@ func Open(name string, flag int, perm os.FileMode) (*os.File, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return f, nil
 }
 
