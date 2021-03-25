@@ -13,7 +13,7 @@ func TestSendEmailServer_SendSms(t *testing.T) {
 
 	sms := &SendEmailServer{}
 
-	toAddr := []string{"2483777043@qq.com"}
+	toAddr := []string{"2483777000@qq.com"}
 
 	rsp, err := sms.SendEmail(context.Background(), &proto_datasvr.SendEmailRequest{
 		Address: toAddr,

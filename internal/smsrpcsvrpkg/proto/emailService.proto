@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package proto.datasvr;
 
-
+option go_package = "internal/smsrpcsvrpkg/proto_datasvr";
 
 // 发送邮件请求
 message SendEmailRequest {
