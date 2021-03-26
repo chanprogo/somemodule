@@ -4,7 +4,7 @@
 // 	protoc        v3.15.6
 // source: internal/smsrpcsvrpkg/proto/emailService.proto
 
-package proto_datasvr
+package protodatasvr
 
 import (
 	context "context"

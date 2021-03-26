@@ -6,7 +6,7 @@ import (
 	"syscall"
 
 	"github.com/chanprogo/somemodule/app"
-	"github.com/chanprogo/somemodule/internal/smsrpcsvrpkg/proto_datasvr"
+	"github.com/chanprogo/somemodule/internal/smsrpcsvrpkg/protodatasvr"
 	"github.com/chanprogo/somemodule/internal/smsrpcsvrpkg/rpcclient"
 	"github.com/chanprogo/somemodule/internal/smsrpcsvrpkg/rpcserver"
 	"github.com/chanprogo/somemodule/pkg/conf/bconf"
@@ -21,7 +21,7 @@ func main() {
 
 	app.NewRPCSvr(bconf.Configer.ApiConf.RpcPort)
 
-	proto_datasvr.RegisterEmailServiceServer(app.RPCSvr, &rpcserver.SendEmailServer{})
+	protodatasvr.RegisterEmailServiceServer(app.RPCSvr, &rpcserver.SendEmailServer{})
 
 	rpcclient.RpcClient()
 

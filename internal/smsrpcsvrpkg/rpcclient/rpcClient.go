@@ -6,7 +6,7 @@ import (
 
 	"fmt"
 
-	pb "github.com/chanprogo/somemodule/internal/smsrpcsvrpkg/proto_datasvr"
+	pb "github.com/chanprogo/somemodule/internal/smsrpcsvrpkg/protodatasvr"
 )
 
 func RpcClient() {

@@ -7,8 +7,6 @@ import (
 	"net"
 	"net/smtp"
 	"strings"
-
-	"github.com/chanprogo/somemodule/internal/smsrpcsvrpkg/constant"
 )
 
 type SendEmail struct {
@@ -16,10 +14,10 @@ type SendEmail struct {
 
 func (s *SendEmail) SendEmail(toAddr []string, subject, body string) (int, error) {
 
-	auth := smtp.PlainAuth("", constant.USER_NAME, constant.PASSWORD, constant.HOST)
+	auth := smtp.PlainAuth("", USER_NAME, PASSWORD, HOST)
 
-	nickname := constant.NICKNAME
-	user := constant.USER_NAME
+	nickname := NICKNAME
+	user := USER_NAME
 
 	content_type := "Content-Type: text/plain; charset=UTF-8"
 
@@ -30,12 +28,12 @@ func (s *SendEmail) SendEmail(toAddr []string, subject, body string) (int, error
 	msg := []byte("To: " + strings.Join(toAddr, ",") + "\r\nFrom: " + nickname +
 		"<" + user + ">\r\nSubject: " + subject + "\r\n" + content_type + "\r\n\r\n" + body)
 
-	err := SendMailUsingTLS(constant.HOST+constant.PORT, auth, user, toAddr, msg)
+	err := SendMailUsingTLS(HOST+PORT, auth, user, toAddr, msg)
 
-	fmt.Println("2 email 发送中.....")
+	fmt.Println("email 发送中.....")
 
 	if err != nil {
-		fmt.Printf("3 send mail error: %v \n\n", err)
+		fmt.Printf("send mail error: %v \n\n", err)
 		return 1, err
 	} else {
 		fmt.Println("send email success!")

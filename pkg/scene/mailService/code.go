@@ -1,7 +1,7 @@
-package constant
+package mailService
 
 const USER_NAME = "intelligence@163.com"
-const PASSWORD = "ABSWXXQKOAAPEYNJ"
+const PASSWORD = "AASWXXQKOAAPEYNJ"
 
 const HOST = "smtp.163.com"
 const PORT = ":465"

@@ -4,7 +4,7 @@
 
 
 
-`protoc --go_out=plugins=grpc:../proto_datasvr *.proto`   
+`protoc --go_out=plugins=grpc:../protodatasvr *.proto`   
 
 
 
@@ -17,6 +17,6 @@
 
 protoc   
 
---go_out=plugins=grpc:../proto_datasvr   
+--go_out=plugins=grpc:../protodatasvr   
 
 *.proto  
