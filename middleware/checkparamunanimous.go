@@ -57,11 +57,6 @@ func CheckParamUnanimous() gin.HandlerFunc {
 		s.Write([]byte(paramStr))
 		sign := hex.EncodeToString(s.Sum(nil))
 
-		// 打印出签名，方便调试
-		if gin.Mode() != gin.ReleaseMode {
-
-		}
-
 		// 对比服务器生成的签名和用户提交的签名
 		if sign != formSign {
 			new(app.Controller).RespErr(ctx, "参数不一致")
