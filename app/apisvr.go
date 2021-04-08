@@ -49,21 +49,3 @@ func StopAPISvr() {
 	defer cancel()
 	APISvr.Shutdown(ctx)
 }
-
-/*
-	// If you want Graceful Restart, you need a Unix system and download github.com/fvbock/endless
-
-	//endless.DefaultReadTimeOut = readTimeout
-	//endless.DefaultWriteTimeOut = writeTimeout
-	//endless.DefaultMaxHeaderBytes = maxHeaderBytes
-
-	//server := endless.NewServer(endPoint, routersInit)
-	//server.BeforeBegin = func(add string) {
-	//	log.Printf("Actual pid is %d", syscall.Getpid())
-	//}
-
-	//err := server.ListenAndServe()
-	//if err != nil {
-	//	log.Printf("Server err: %v", err)
-	//}
-*/

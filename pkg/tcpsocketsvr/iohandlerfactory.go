@@ -9,7 +9,6 @@ type IoHandlerFactory interface {
 type DefaultIoHandlerFactory struct {
 }
 
-// CreateIoHandler ...
 func (defaultFactory *DefaultIoHandlerFactory) CreateIoHandler() IoHandler {
 	return new(DefaultIoHandler)
 }
