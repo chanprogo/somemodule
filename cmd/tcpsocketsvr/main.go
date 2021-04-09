@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/chanprogo/somemodule/pkg/tcpsocket"
+	"github.com/chanprogo/somemodule/pkg/iohandler"
 )
 
 func main() {
 
-	server := tcpsocket.GetServer()
+	server := GetServer()
 
-	ioHandlerFactory := new(tcpsocket.DefaultIoHandlerFactory)
+	ioHandlerFactory := new(iohandler.DefaultIoHandlerFactory)
 
 	sErr := server.Start(ioHandlerFactory)
 	if sErr != nil {

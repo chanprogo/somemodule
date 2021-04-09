@@ -1,15 +1,17 @@
-package tcpsocket
+package main
 
 import (
 	"fmt"
 	"net"
 	"strconv"
 	"time"
+
+	"github.com/chanprogo/somemodule/pkg/iohandler"
 )
 
 // IoConn ...
 type IoConn interface {
-	Start(IoHandler, net.Conn, uint32)
+	Start(iohandler.IoHandler, net.Conn, uint32)
 	Close()
 	Read(uint32)
 	Write([]byte)
@@ -23,11 +25,11 @@ type ObdTCPConn struct {
 	conn          net.Conn
 	readedData    []byte
 	readedDataLen int
-	handler       IoHandler
+	handler       iohandler.IoHandler
 }
 
 // Start ...
-func (oTConn *ObdTCPConn) Start(handler IoHandler, conn net.Conn, maxSendQueue uint32) {
+func (oTConn *ObdTCPConn) Start(handler iohandler.IoHandler, conn net.Conn, maxSendQueue uint32) {
 	go func() {
 		oTConn.conn = conn
 		oTConn.handler = handler

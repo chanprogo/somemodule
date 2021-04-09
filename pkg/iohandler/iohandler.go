@@ -1,41 +1,39 @@
-package tcpsocket
+package iohandler
 
 import (
 	"fmt"
 	"net"
 	"strconv"
+	"sync"
 	"time"
 )
 
-// IoHandler ...
+var ConnMapMutex sync.Mutex
+var ClientConnMap map[string]net.Conn
+
 type IoHandler interface {
 	OnClosed()
 	OnError(error)
 	OnReadFinished(**string, net.Conn, []byte) (bool, int)
 }
 
-// DefaultIoHandler ...
 type DefaultIoHandler struct {
 	//conn IoConn
 }
 
-// OnClosed ...
 func (dH *DefaultIoHandler) OnClosed() {
 	//	fmt.Println("io close, addr:%s, name:%s", dH.conn.RemoteAddr(), dH.conn.RemoteName())
 }
 
-// OnError ...
 func (dH *DefaultIoHandler) OnError(err error) {
 	//	fmt.Println("io error form, addr:%s, name:%s", dH.conn.RemoteAddr(), dH.conn.RemoteName())
 	//	dH.conn.Close()
 }
 
-// OnReadFinished ...
 // 返回值：
 // bool:是否正确处理
 // int:消息处理用掉的数据长度
 func (dH *DefaultIoHandler) OnReadFinished(myKey **string, conn net.Conn, data []byte) (bool, int) {
-
 	msgLen := len(data)
 	var cpdata = make([]byte, msgLen)
 	copy(cpdata, data[:msgLen])
@@ -44,9 +42,9 @@ func (dH *DefaultIoHandler) OnReadFinished(myKey **string, conn net.Conn, data [
 		temp := strconv.FormatInt(time.Now().Unix(), 10)
 		*myKey = &temp
 		{
-			connMapMutex.Lock()
-			clientConnMap[**myKey] = conn
-			connMapMutex.Unlock()
+			ConnMapMutex.Lock()
+			ClientConnMap[**myKey] = conn
+			ConnMapMutex.Unlock()
 		}
 	}
 
@@ -55,7 +53,6 @@ func (dH *DefaultIoHandler) OnReadFinished(myKey **string, conn net.Conn, data [
 		if err := conn.SetWriteDeadline(time.Now().Add(time.Second * 5)); err != nil {
 			fmt.Println("set write timeout fail")
 		}
-
 		sendlen, err := conn.Write(rsp)
 		if sendlen == 0 || err != nil {
 
