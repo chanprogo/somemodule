@@ -1,4 +1,4 @@
-package main
+package tcpsocket
 
 // IoHandlerFactory ...
 type IoHandlerFactory interface {

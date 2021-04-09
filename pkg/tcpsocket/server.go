@@ -1,4 +1,4 @@
-package main
+package tcpsocket
 
 import (
 	"fmt"
@@ -16,7 +16,6 @@ type Server struct {
 
 var obdServer *Server
 
-// GetServer ...
 func GetServer() *Server {
 	if obdServer == nil {
 		obdServer = new(Server)
