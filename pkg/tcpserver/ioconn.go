@@ -9,30 +9,35 @@ import (
 	"github.com/chanprogo/somemodule/pkg/iohandler"
 )
 
-// IoConn ...
 type IoConn interface {
 	Start(iohandler.IoHandler, net.Conn, uint32)
 	Close()
+
 	Read(uint32)
 	Write([]byte)
+
 	RemoteName() string
 	RemoteAddr() string
+
 	OnClose(**string)
 }
 
-// ObdTCPConn ...
-type ObdTCPConn struct {
-	conn          net.Conn
+type MyTCPConn struct {
+	conn net.Conn
+
 	readedData    []byte
 	readedDataLen int
-	handler       iohandler.IoHandler
+
+	handler iohandler.IoHandler
 }
 
-// Start ...
-func (oTConn *ObdTCPConn) Start(handler iohandler.IoHandler, conn net.Conn, maxSendQueue uint32) {
+func (oTConn *MyTCPConn) Start(handler iohandler.IoHandler, conn net.Conn, maxSendQueue uint32) {
+
 	go func() {
+
 		oTConn.conn = conn
 		oTConn.handler = handler
+
 		oTConn.readedData = make([]byte, 7000)
 		oTConn.readedDataLen = 0
 
@@ -92,27 +97,27 @@ func (oTConn *ObdTCPConn) Start(handler iohandler.IoHandler, conn net.Conn, maxS
 }
 
 // Close ...
-func (oTConn *ObdTCPConn) Close() {
+func (oTConn *MyTCPConn) Close() {
 }
 
-func (oTConn *ObdTCPConn) Read(bytes uint32) {
+func (oTConn *MyTCPConn) Read(bytes uint32) {
 }
 
-func (oTConn *ObdTCPConn) Write(data []byte) {
+func (oTConn *MyTCPConn) Write(data []byte) {
 }
 
 // RemoteName ...
-func (oTConn *ObdTCPConn) RemoteName() string {
+func (oTConn *MyTCPConn) RemoteName() string {
 	return oTConn.conn.RemoteAddr().Network()
 }
 
 // RemoteAddr ...
-func (oTConn *ObdTCPConn) RemoteAddr() string {
+func (oTConn *MyTCPConn) RemoteAddr() string {
 	return oTConn.conn.RemoteAddr().String()
 }
 
 // OnClose ...
-func (oTConn *ObdTCPConn) OnClose(myKey **string) {
+func (oTConn *MyTCPConn) OnClose(myKey **string) {
 	fmt.Println("ObdTcpConn OnClose begin. addr:" + oTConn.conn.RemoteAddr().String())
 
 	GetServer().OnIoDisCon(*myKey)

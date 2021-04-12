@@ -15,16 +15,17 @@ type Server struct {
 	stopListenChannel chan bool
 }
 
-var obdServer *Server
+var myServer *Server
 
 func GetServer() *Server {
-	if obdServer == nil {
-		obdServer = new(Server)
+	if myServer == nil {
+		myServer = new(Server)
 	}
-	return obdServer
+	return myServer
 }
 
 func (thisServer *Server) Start(factory iohandler.IoHandlerFactory) error {
+
 	thisServer.ioHandlerFactory = factory
 
 	iohandler.ClientConnMap = make(map[string]net.Conn)
@@ -40,28 +41,7 @@ func (thisServer *Server) Start(factory iohandler.IoHandlerFactory) error {
 	} else {
 		fmt.Println(err.Error())
 	}
-
 	return err
-}
-
-func (thisServer *Server) Stop() {
-	fmt.Println("Server stop")
-	thisServer.stopListenChannel <- true
-	//thisServer.closeAllConn() // 清理客户端
-}
-
-// func (thisServer *Server) closeAllConn() {
-// }
-
-func (thisServer *Server) OnIoDisCon(myKey *string) {
-	fmt.Println("[invalid]: remove one conn from map..")
-	if myKey != nil {
-		{
-			iohandler.ConnMapMutex.Lock()
-			delete(iohandler.ClientConnMap, *myKey)
-			iohandler.ConnMapMutex.Unlock()
-		}
-	}
 }
 
 func (thisServer *Server) startTCP(errorChannel chan error) {
@@ -107,7 +87,7 @@ func (thisServer *Server) startTCP(errorChannel chan error) {
 }
 
 func (thisServer *Server) onConn(conn net.Conn) {
-	ioConn := new(ObdTCPConn)
+	ioConn := new(MyTCPConn)
 	ioConn.Start(thisServer.ioHandlerFactory.CreateIoHandler(), conn, 10000)
 }
 
@@ -150,3 +130,23 @@ func SendRespMsg(obdsnOm string, dataMem []byte) int {
 	fmt.Println("send out msg, sendlen:" + strconv.Itoa(sendlen))
 	return 0
 }
+
+func (thisServer *Server) OnIoDisCon(myKey *string) {
+	fmt.Println("[invalid]: remove one conn from map..")
+	if myKey != nil {
+		{
+			iohandler.ConnMapMutex.Lock()
+			delete(iohandler.ClientConnMap, *myKey)
+			iohandler.ConnMapMutex.Unlock()
+		}
+	}
+}
+
+func (thisServer *Server) Stop() {
+	fmt.Println("Server stop")
+	thisServer.stopListenChannel <- true
+	//thisServer.closeAllConn() // 清理客户端
+}
+
+// func (thisServer *Server) closeAllConn() {
+// }
