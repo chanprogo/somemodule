@@ -4,17 +4,16 @@ import (
 	"fmt"
 	"net"
 	"strconv"
-	"sync"
 	"time"
+
+	"github.com/chanprogo/somemodule/pkg/tcpserver"
 )
 
-var ConnMapMutex sync.Mutex
-var ClientConnMap map[string]net.Conn
+type DefaultIoHandlerFactory struct {
+}
 
-type IoHandler interface {
-	OnClosed()
-	OnError(error)
-	OnReadFinished(**string, net.Conn, []byte) (bool, int)
+func (defaultFactory *DefaultIoHandlerFactory) CreateIoHandler() tcpserver.IoHandler {
+	return new(DefaultIoHandler)
 }
 
 type DefaultIoHandler struct {
@@ -42,9 +41,9 @@ func (dH *DefaultIoHandler) OnReadFinished(myKey **string, conn net.Conn, data [
 		temp := strconv.FormatInt(time.Now().Unix(), 10)
 		*myKey = &temp
 		{
-			ConnMapMutex.Lock()
-			ClientConnMap[**myKey] = conn
-			ConnMapMutex.Unlock()
+			tcpserver.ConnMapMutex.Lock()
+			tcpserver.ClientConnMap[**myKey] = conn
+			tcpserver.ConnMapMutex.Unlock()
 		}
 	}
 

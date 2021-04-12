@@ -4,16 +4,17 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/chanprogo/somemodule/pkg/iohandler"
+	"github.com/chanprogo/somemodule/pkg/tcpserver"
 )
 
 func main() {
 
-	server := GetServer()
+	server := tcpserver.GetServer()
 
-	ioHandlerFactory := new(iohandler.DefaultIoHandlerFactory)
+	
 
-	sErr := server.Start(ioHandlerFactory)
+	sErr := server.Start(new(DefaultIoHandlerFactory))
+	
 	if sErr != nil {
 		fmt.Println("Server Start err: " + sErr.Error())
 		return

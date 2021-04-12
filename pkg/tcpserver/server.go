@@ -1,17 +1,19 @@
-package main
+package tcpserver
 
 import (
 	"fmt"
 	"net"
 	"strconv"
+	"sync"
 	"time"
-
-	"github.com/chanprogo/somemodule/pkg/iohandler"
 )
+
+var ConnMapMutex sync.Mutex
+var ClientConnMap map[string]net.Conn
 
 // Server ...
 type Server struct {
-	ioHandlerFactory  iohandler.IoHandlerFactory
+	ioHandlerFactory  IoHandlerFactory
 	stopListenChannel chan bool
 }
 
@@ -24,11 +26,11 @@ func GetServer() *Server {
 	return myServer
 }
 
-func (thisServer *Server) Start(factory iohandler.IoHandlerFactory) error {
+func (thisServer *Server) Start(factory IoHandlerFactory) error {
 
 	thisServer.ioHandlerFactory = factory
 
-	iohandler.ClientConnMap = make(map[string]net.Conn)
+	ClientConnMap = make(map[string]net.Conn)
 
 	errorChannel := make(chan error)
 	defer close(errorChannel)
@@ -76,7 +78,7 @@ func (thisServer *Server) startTCP(errorChannel chan error) {
 					fmt.Print(".")
 					continue
 				}
-				fmt.Println(err.Error() + ", client conn count:" + strconv.Itoa(len(iohandler.ClientConnMap)))
+				fmt.Println(err.Error() + ", client conn count:" + strconv.Itoa(len(ClientConnMap)))
 				time.Sleep(1 * time.Second)
 				continue
 			}
@@ -96,11 +98,11 @@ func SendRespMsg(obdsnOm string, dataMem []byte) int {
 	var ok bool
 
 	{
-		iohandler.ConnMapMutex.Lock()
-		if conn, ok = iohandler.ClientConnMap[obdsnOm]; ok {
-			iohandler.ConnMapMutex.Unlock()
+		ConnMapMutex.Lock()
+		if conn, ok = ClientConnMap[obdsnOm]; ok {
+			ConnMapMutex.Unlock()
 		} else {
-			iohandler.ConnMapMutex.Unlock()
+			ConnMapMutex.Unlock()
 			return 1
 		}
 	}
@@ -135,9 +137,9 @@ func (thisServer *Server) OnIoDisCon(myKey *string) {
 	fmt.Println("[invalid]: remove one conn from map..")
 	if myKey != nil {
 		{
-			iohandler.ConnMapMutex.Lock()
-			delete(iohandler.ClientConnMap, *myKey)
-			iohandler.ConnMapMutex.Unlock()
+			ConnMapMutex.Lock()
+			delete(ClientConnMap, *myKey)
+			ConnMapMutex.Unlock()
 		}
 	}
 }

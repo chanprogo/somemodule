@@ -1,4 +1,4 @@
-package main
+package tcpserver
 
 import (
 	"fmt"
@@ -6,11 +6,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/chanprogo/somemodule/pkg/iohandler"
+	
 )
 
 type IoConn interface {
-	Start(iohandler.IoHandler, net.Conn, uint32)
+	Start(IoHandler, net.Conn, uint32)
 	Close()
 
 	Read(uint32)
@@ -28,10 +28,10 @@ type MyTCPConn struct {
 	readedData    []byte
 	readedDataLen int
 
-	handler iohandler.IoHandler
+	handler IoHandler
 }
 
-func (oTConn *MyTCPConn) Start(handler iohandler.IoHandler, conn net.Conn, maxSendQueue uint32) {
+func (oTConn *MyTCPConn) Start(handler IoHandler, conn net.Conn, maxSendQueue uint32) {
 
 	go func() {
 
