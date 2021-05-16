@@ -15,21 +15,18 @@ func CreateHTTPClient(interval int, proxyUrl string) *http.Client {
 	if proxyUrl == "" {
 
 		client := &http.Client{
-
 			Transport: &http.Transport{
-
 				DialContext: (&net.Dialer{
 					Timeout:   30 * time.Second,
 					KeepAlive: 30 * time.Second,
 				}).DialContext,
-
 				MaxIdleConns:        100,
 				MaxIdleConnsPerHost: 50,
 				IdleConnTimeout:     time.Duration(60) * time.Second,
 			},
-			
 			Timeout: time.Duration(interval) * time.Second,
 		}
+
 		return client
 	}
 
@@ -38,7 +35,6 @@ func CreateHTTPClient(interval int, proxyUrl string) *http.Client {
 	}
 
 	client := &http.Client{
-
 		Transport: &http.Transport{
 			Proxy: proxy,
 			DialContext: (&net.Dialer{
@@ -51,6 +47,7 @@ func CreateHTTPClient(interval int, proxyUrl string) *http.Client {
 		},
 		Timeout: time.Duration(interval) * time.Second,
 	}
+
 	return client
 
 }

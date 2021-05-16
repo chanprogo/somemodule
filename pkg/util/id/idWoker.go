@@ -19,6 +19,5 @@ func NewIdWorker(node int64) {
 		node:      node,
 		step:      0,
 	}
-
 	IdWorker = snowflakeIns
 }
