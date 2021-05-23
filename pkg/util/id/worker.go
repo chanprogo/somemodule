@@ -9,11 +9,9 @@ type idWorker interface {
 var IdWorker idWorker
 
 func NewIdWorker(node int64) {
-	// snowflake 实现
 	if node < 0 || node > nodeMax {
-		panic(fmt.Sprintf("snowflake 节点必须在 0-%d 之间", node))
+		panic(fmt.Sprintf("snowflake 节点必须在 0-%d 之间", nodeMax))
 	}
-
 	snowflakeIns := &snowflake{
 		timestamp: 0,
 		node:      node,
