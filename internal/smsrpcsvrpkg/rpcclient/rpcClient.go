@@ -23,10 +23,14 @@ func RpcClient() {
 	body := "This is body."
 	address := []string{"2483777000@qq.com"}
 	fmt.Println("0 " + body)
-	r, err := c.SendEmail(context.Background(), &pb.SendEmailRequest{Address: address, Subject: subject, Body: body})
+
+	in := &pb.SendEmailRequest{Address: address, Subject: subject, Body: body}
+
+	r, err := c.SendEmail(context.Background(), in)
 	if err != nil {
 		// log.Logger.Error("could not send sms: %v", err)
 		fmt.Printf("4 could not send sms: %v \n\n", err)
 	}
+
 	fmt.Println("r.code:", r.Code)
 }
